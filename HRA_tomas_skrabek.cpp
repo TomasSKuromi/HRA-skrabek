@@ -62,9 +62,109 @@ void village() {
         }
         else if (choice == 0) break;
     }
+
 }
 
-// ---------- SCHOPNOST ----------
+void ability(vector<int>& enemyHp, int enemies) {
+
+    if (playerClass == "Paladin") {
+        if (mana >= 2) {
+            mana -= 2;
+            hp = min(maxHp, hp + 6);
+            cout << "Heal!\n";
+        }
+    }
+
+    else if (playerClass == "Mag") {
+        if (mana >= 3) {
+            mana -= 3;
+            cout << "Fireball!\n";
+            for (int i = 0; i < enemies; i++)
+                if (enemyHp[i] > 0)
+                    enemyHp[i] -= attack + 3;
+        }
+    }
+
+    else if (playerClass == "Lovec") {
+        if (mana >= 3) {
+            mana -= 3;
+            cout << "triple shot!\n";
+
+            for (int i = 0; i < enemies; i++) {
+                if (enemyHp[i] > 0) {
+                    enemyHp[i] -= attack * 3;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+// ---------- BOJ ----------
+void fight(int enemies, bool miniBoss = false) {
+
+    vector<int> enemyHp(enemies);
+
+    for (int i = 0; i < enemies; i++) {
+        enemyHp[i] = miniBoss ? 30 : (10 + rand() % 10);
+    }
+
+    cout << "\n--- SOUBOJ ---\n";
+
+    while (true) {
+
+        cout << "\nHP: " << hp << "/" << maxHp
+             << " | Mana: " << mana << "/" << maxMana << "\n";
+
+        int choice;
+        cout << "1 Attack\n2 Skill\n";
+        cin >> choice;
+
+        if (choice == 1) {
+            for (int i = 0; i < enemies; i++) {
+                if (enemyHp[i] > 0) {
+                    enemyHp[i] -= attack;
+                    cout << "Hit!\n";
+                    break;
+                }
+            }
+        }
+        else if (choice == 2) {
+            ability(enemyHp, enemies);
+        }
+
+        // DEAD CHECK
+        bool dead = true;
+        for (int hpsmrt : enemyHp)
+            if (hpsmrt > 0) dead = false;
+
+        if (dead) {
+            cout << "Vyhra!\n";
+
+            exp += miniBoss ? 10 : 5;
+
+            if (miniBoss)
+                gold += 10 + rand() % 15;
+            else if (rand() % 2)
+                gold += 5 + rand() % 10;
+
+            levelUp();
+            return;
+        }
+
+        // ENEMY ATTACK
+        for (int i = 0; i < enemies; i++) {
+            if (enemyHp[i] > 0) {
+                hp -= miniBoss ? 5 : 3;
+            }
+        }
+
+        if (hp <= 0) {
+            cout << "PROHRA!\n";
+            exit(0);
+        }
+    }
+}
 
 // ---------- BOJ ----------
 
@@ -72,6 +172,6 @@ void village() {
 
 // ---------- MAIN ----------
 int main() {
-
-
 }
+
+
