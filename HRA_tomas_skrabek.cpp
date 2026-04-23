@@ -62,6 +62,7 @@ void village() {
         }
         else if (choice == 0) break;
     }
+
 }
 
 void ability(vector<int>& enemyHp, int enemies) {
@@ -171,7 +172,6 @@ void fight(int enemies, bool miniBoss = false) {
 
 // ---------- MAIN ----------
 int main() {
-
-
 }
+
 
